@@ -24,7 +24,14 @@ class Lottery extends Component{
         const total_amount = await web3.eth.getBalance(lottery.options.address);
         this.setState({total_amount : total_amount })
     }
-
+onClick = async() =>{
+    this.setState({message: "Please wait....."})
+    const accounts = await web3.eth.getAccounts();
+    const winner = await lottery.methods.pickWinner().send({
+        from : accounts[0]
+    });
+    this.setState({message : "Payment sent to winner"});
+}
     onSubmit = async (event)=>{
         event.preventDefault();
         const accounts = await web3.eth.getAccounts();
@@ -54,7 +61,7 @@ class Lottery extends Component{
                 <p> {this.state.message} </p>
                 <hr /> <br /> <hr />
                 <p>The manager of the lottery decentralized app is {this.state.manager} </p>
-                <button> Pick Winner </button>
+                <button onClick = {this.onClick}> Pick Winner </button>
             </div>
             
         )
